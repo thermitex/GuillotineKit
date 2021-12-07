@@ -1,11 +1,6 @@
 import XCTest
-@testable import Guillotine
+@testable import GuillotineKit
 
 final class GuillotineTests: XCTestCase {
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct
-        // results.
-        XCTAssertEqual(Guillotine().text, "Hello, World!")
-    }
+
 }
