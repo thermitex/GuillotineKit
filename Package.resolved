@@ -2,6 +2,15 @@
   "object": {
     "pins": [
       {
+        "package": "IndexStoreDB",
+        "repositoryURL": "https://code.byted.org/liruijie.x/BDIndexDB",
+        "state": {
+          "branch": "main",
+          "revision": "6c4d247a3c0ff7b624222fed3f063fa5b22e2cf5",
+          "version": null
+        }
+      },
+      {
         "package": "swift-argument-parser",
         "repositoryURL": "https://github.com/apple/swift-argument-parser.git",
         "state": {

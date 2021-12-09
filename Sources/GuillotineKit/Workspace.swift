@@ -28,11 +28,11 @@ public final class GLTWorkspace {
 
     public init(
         indexStorePath storePath: String,
+        databaseStorePath dbPath: String = NSTemporaryDirectory() + "index_\(getpid())",
         libraryPath libPath: String = "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/libIndexStore.dylib",
         listenToUnitEvents: Bool = false
     ) throws {
         let lib = try IndexStoreLibrary(dylibPath: libPath)
-        let dbPath = NSTemporaryDirectory() + "index_\(getpid())"
         self.db = try IndexStoreDB(
             storePath: URL(fileURLWithPath: storePath).path,
             databasePath: dbPath,

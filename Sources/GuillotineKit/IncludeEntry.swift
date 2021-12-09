@@ -46,7 +46,11 @@ extension IncludeEntry {
     }
     
     public var warningText: String {
-        return "The import for \"\(self.targetFilename)\" could be removed"
+        return "\(self.sourcePath):\(line): warning: The import for \"\(self.targetFilename)\" could be removed"
+    }
+    
+    public var errorText: String {
+        return "\(self.sourcePath):\(line): error: The import for \"\(self.targetFilename)\" could be removed"
     }
     
 }

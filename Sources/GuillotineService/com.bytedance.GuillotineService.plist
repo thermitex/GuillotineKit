@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+  <string>com.bytedance.GuillotineService</string>
+  <key>Program</key>
+  <string>/Users/bytedance/Documents/Guillotine/GuillotineKit/.build/x86_64-apple-macosx/release/GuillotineService</string>
+    <key>MachServices</key>
+    <dict>
+        <key>com.bytedance.GuillotineService</key>
+        <true/>
+    </dict>
+</dict>
+</plist>
