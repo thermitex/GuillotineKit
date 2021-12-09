@@ -25,6 +25,7 @@ public final class GLTWorkspace {
     
     private let db: IndexStoreDB
     private var logger = GLTLogger.shared()
+    private var indexPath: String
 
     public init(
         indexStorePath storePath: String,
@@ -39,6 +40,7 @@ public final class GLTWorkspace {
             library: lib,
             listenToUnitEvents: listenToUnitEvents)
         logger.debug("Intializing database at \(dbPath)")
+        indexPath = storePath
         
         db.pollForUnitChangesAndWait()
     }
@@ -63,7 +65,7 @@ public final class GLTWorkspace {
         deleteUnusedIncludes: Bool = false
     ) -> [IncludeEntry] {
         logger.debug("Scanning file \(filePath)")
-        let res = IncludeAnalyzer(database: db, filePath: filePath, scanLevel: scanLevel).findUnusedInclude()
+        let res = IncludeAnalyzer(database: db, indexPath: indexPath, filePath: filePath, scanLevel: scanLevel).findUnusedInclude()
         if deleteUnusedIncludes {
             IncludeRemover(filePath: filePath, unusedEntries: res).asyncExecuteDeletion()
         }

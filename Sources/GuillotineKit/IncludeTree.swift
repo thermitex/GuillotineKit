@@ -34,6 +34,12 @@ extension IncludeNode: Equatable {
     }
 }
 
+extension IncludeNode: CustomStringConvertible {
+    public var description: String {
+        return includeEntry.description
+    }
+}
+
 
 // MARK: - Include Tree
 

@@ -11,6 +11,7 @@ import IndexStoreDB
 class IncludeAnalyzer {
     
     private let db: IndexStoreDB
+    private let indexPath: String
     private let scanLevel: ScanLevel
     private let filePath: String
     private let fileContent: String?
@@ -22,12 +23,14 @@ class IncludeAnalyzer {
     
     init(
         database: IndexStoreDB,
+        indexPath: String,
         filePath: String,
         scanLevel: ScanLevel
     ) {
         db = database
         self.scanLevel = scanLevel
         self.filePath = filePath
+        self.indexPath = indexPath
         do {
             fileContent = try String(contentsOf: URL(fileURLWithPath: filePath), encoding: .utf8)
         } catch {
@@ -35,14 +38,42 @@ class IncludeAnalyzer {
         }
     }
     
+    private func unitModificationDate(unitName: String) -> Date? {
+        let fullPath = indexPath + "/v5/units/" + unitName
+        do {
+            let attr = try FileManager.default.attributesOfItem(atPath: fullPath)
+            return attr[FileAttributeKey.modificationDate] as? Date
+        } catch {
+            return nil
+        }
+    }
+    
     /// Construct an include tree for a file.
     private func constructIncludeTree(forFile filePath: String) -> IncludeTree {
         let includeTree = IncludeTree(filePath: filePath)
+        var latestUnitName: String? = nil
+        var latestDate: Date? = nil
         db.forEachUnitNameContainingFile(path: filePath) { unitName in
-            self.db.includesOfUnit(unitName: unitName).forEach { include in
-                includeTree.addToIncludeTree(includeEntry: IncludeEntry(include))
+            let date = self.unitModificationDate(unitName: unitName)
+            if latestUnitName == nil {
+                latestUnitName = unitName
+            }
+            if latestDate == nil {
+                latestDate = date
+            } else {
+                guard let date = date else { return true }
+                if date > latestDate! {
+                    latestDate = date
+                    latestUnitName = unitName
+                }
             }
             return true
+        }
+        guard let latestUnitName = latestUnitName else {
+            return includeTree
+        }
+        self.db.includesOfUnit(unitName: latestUnitName).forEach { include in
+            includeTree.addToIncludeTree(includeEntry: IncludeEntry(include))
         }
         includeTree.retryConnectDiscreteNodes()
         return includeTree

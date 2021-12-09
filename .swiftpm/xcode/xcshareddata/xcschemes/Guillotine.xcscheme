@@ -80,6 +80,14 @@
             isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
+            argument = "/Users/bytedance/Library/Developer/Xcode/DerivedData/TT_Meaningless_Hashtag-fxlefsqeseypymbwduxfvwiyacpl/Index/DataStore"
+            isEnabled = "YES">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "/Users/bytedance/Documents/TT_Workspaces/TT_Meaningless_Hashtag/TikTokFeed/AWEFeed/Classes/Core/BizModules/Home/Tabs/Common/ViewController/AWEFeedTableViewController.m"
+            isEnabled = "YES">
+         </CommandLineArgument>
+         <CommandLineArgument
             argument = "/Users/bytedance/Documents/TT_Workspaces/Search_clean/TikTokSearch/AWESearch"
             isEnabled = "NO">
          </CommandLineArgument>
@@ -93,11 +101,11 @@
          </CommandLineArgument>
          <CommandLineArgument
             argument = "--debug"
-            isEnabled = "NO">
+            isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "-h"
-            isEnabled = "YES">
+            isEnabled = "NO">
          </CommandLineArgument>
       </CommandLineArguments>
    </LaunchAction>
