@@ -22,6 +22,7 @@ struct GLTClientCommand: ParsableCommand {
     @Flag(name: .customShort("1"), help: "Use normal scan level.") var useNormalMode = false
     @Flag(name: .customShort("2"), help: "Use strict scan level (could result in false positive results).") var useStrictMode = false
     @Flag(name: [.customShort("w"), .long], help: "Display warnings instead of errors.") var useWarning = false
+    @Flag(name: .shortAndLong, help: "Scan all diff files (only applicable to MBox projects).") var scanAllDiff = false
     
     private func getScanLevel() -> Int {
         var scanLevel = 1
@@ -69,7 +70,7 @@ struct GLTClientCommand: ParsableCommand {
         if let indexPath = indexPath {
             
             if let srcRoot = ProcessInfo.processInfo.environment["SRCROOT"] {
-                if let diffRes = client.scanFiles(filePaths: DiffFilesCollector(srcRoot: srcRoot).diff(),
+                if let diffRes = client.scanFiles(filePaths: DiffFilesCollector(srcRoot: srcRoot, scanAllDiff: scanAllDiff).diff(),
                                                   indexPath: indexPath,
                                                   scanLevel: getScanLevel(),
                                                   useWarning: useWarning) {

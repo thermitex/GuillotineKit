@@ -56,6 +56,9 @@ class GLTClient {
     
     func scanFiles(filePaths: [String], indexPath: String, scanLevel: Int, useWarning: Bool) -> String? {
         let filteredFilePaths = filter(filePaths)
+        if filteredFilePaths.isEmpty {
+            return nil
+        }
         print("Scanning files \(filteredFilePaths.joined(separator: ", "))...")
         var res: String? = nil
         let group = DispatchGroup()

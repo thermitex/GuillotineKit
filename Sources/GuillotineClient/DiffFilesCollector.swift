@@ -10,16 +10,18 @@ import Foundation
 class DiffFilesCollector {
     
     private var srcRoot: String
+    private var scanAllDiff: Bool
     
-    init(srcRoot: String) {
+    init(srcRoot: String, scanAllDiff: Bool) {
         self.srcRoot = srcRoot
+        self.scanAllDiff = scanAllDiff
     }
     
     func diff() -> [String] {
         var res: [String] = []
         if let diffScriptURL = Bundle.module.url(forResource: "diff", withExtension: "py") {
             let bash: CommandExecuting = Bash()
-            if let diffOutput = try? bash.run(commandName: "python3", arguments: [diffScriptURL.path, srcRoot]) {
+            if let diffOutput = try? bash.run(commandName: "python3", arguments: [diffScriptURL.path, srcRoot, scanAllDiff ? "scanall" : "-"]) {
                 let files = diffOutput.replacingOccurrences(of: "\n", with: "").components(separatedBy: ",")
                 res.append(contentsOf: files)
             }

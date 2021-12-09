@@ -1,6 +1,7 @@
 import os, sys, json
 
 src_root = sys.argv[1]
+scan_all_diff = True if sys.argv[2] == "scanall" else False
 
 # Fetch mbox config
 res = []
@@ -23,12 +24,13 @@ file_res = []
 for name, curr_branch, target_branch in res:
     final_path = os.path.join(src_root, name)
     os.chdir(final_path)
-    with os.popen(f'git diff --name-only {target_branch}...{curr_branch}', 'r') as fp:
-        files = fp.readlines()
-        for file in files:
-            file = os.path.join(final_path, file.strip())
-            if file not in file_res:
-                file_res.append(file)
+    if scan_all_diff:
+        with os.popen(f'git diff --name-only {target_branch}...{curr_branch}', 'r') as fp:
+            files = fp.readlines()
+            for file in files:
+                file = os.path.join(final_path, file.strip())
+                if file not in file_res:
+                    file_res.append(file)
     with os.popen(f'git diff --name-only HEAD', 'r') as fp:
         files = fp.readlines()
         for file in files:
