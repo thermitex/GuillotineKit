@@ -1,10 +1,10 @@
-echo "\033[32m[1/3] De-register Existing Service\033[0m"
+echo "\033[32m[1/4] De-register Existing Service\033[0m"
 launchctl unload /usr/local/Cellar/guillotine/com.bytedance.GuillotineService.plist
 
-echo "\033[32m[2/3] Build Guillotine Package\033[0m"
+echo "\033[32m[2/4] Build Guillotine Package\033[0m"
 swift build --configuration release
 
-echo "\033[32m[3/3] Setup Binaries\033[0m"
+echo "\033[32m[3/4] Setup Binaries\033[0m"
 rm -rf /usr/local/Cellar/guillotine
 rm -rf /usr/local/bin/gltc
 
@@ -23,7 +23,7 @@ cd /usr/local/bin
 ln -s ../Cellar/guillotine/gltc gltc
 chmod u+x gltc
 
-echo "\033[32mRegister Guillotine Service\033[0m"
+echo "\033[32m[4/4]Register Guillotine Service\033[0m"
 launchctl load /usr/local/Cellar/guillotine/com.bytedance.GuillotineService.plist
 
 echo "\033[32mInstallation Completed\033[0m"
