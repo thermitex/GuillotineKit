@@ -15,6 +15,5 @@ protocol GLTServiceProtocol {
 
     func disableService()
     func enableService()
-    func cleanWorkspaces()
     
 }

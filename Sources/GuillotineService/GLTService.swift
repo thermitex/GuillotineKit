@@ -12,9 +12,9 @@ import GuillotineKit
 class GLTService: NSObject, GLTServiceProtocol {
     
     private var workspaceDict: [String: GLTWorkspace] = [:]
-    private var enabled: Bool = true
+    private static var enabled: Bool = true
     
-    private func getWorkspace(_ indexPath: String) -> GLTWorkspace? {
+    private func getWorkspace(_ indexPath: String, _ reply: @escaping (String) -> Void) -> GLTWorkspace? {
         if let workspace = workspaceDict[indexPath] {
             return workspace
         } else {
@@ -23,17 +23,18 @@ class GLTService: NSObject, GLTServiceProtocol {
                 workspaceDict[indexPath] = workspace
                 return workspace
             } catch {
+                reply("Error initing workspace: \(error)")
                 return nil
             }
         }
     }
     
     private func prepareForScan(_ indexPath: String, _ reply: @escaping (String) -> Void) -> GLTWorkspace? {
-        if !enabled {
+        if !GLTService.enabled {
             reply("The service has been disabled. Enable it by executing `gltc --enable`.")
             return nil
         }
-        let workspace = getWorkspace(indexPath)
+        let workspace = getWorkspace(indexPath, reply)
         guard let workspace = workspace else {
             reply("Failed setting up workspace")
             return nil
@@ -74,14 +75,10 @@ class GLTService: NSObject, GLTServiceProtocol {
     }
     
     func disableService() {
-        enabled = false
+        GLTService.enabled = false
     }
     
     func enableService() {
-        enabled = true
-    }
-
-    func cleanWorkspaces() {
-        workspaceDict.removeAll()
+        GLTService.enabled = true
     }
 }

@@ -12,7 +12,6 @@ struct GLTClientCommand: ParsableCommand {
     
     @Flag(name: .long, help: "Disable service globally.") var disable = false
     @Flag(name: .long, help: "Enable service globally.") var enable = false
-    @Flag(name: .long, help: "Clean database caches.") var clean = false
     
     @Option(name: .long, help:"A custom regular expression that defines what kind of files should be scanned. Defaults to .m files.") var customMatch: String?
     @Option(name: .long, help:"Scan a file apart from default files.") var scanFile: String?
@@ -43,10 +42,6 @@ struct GLTClientCommand: ParsableCommand {
         }
         if enable {
             client.service!.enableService()
-            return
-        }
-        if clean {
-            client.service!.cleanWorkspaces()
             return
         }
         
