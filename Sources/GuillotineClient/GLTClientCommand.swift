@@ -16,12 +16,12 @@ struct GLTClientCommand: ParsableCommand {
     @Option(name: .long, help:"A custom regular expression that defines what kind of files should be scanned. Defaults to .m files.") var customMatch: String?
     @Option(name: .long, help:"Scan a file apart from default files.") var scanFile: String?
     @Option(name: .long, help:"Scan files apart from default files, separated by \",\".") var scanFiles: String?
+    @Option(name: .shortAndLong, help: "Use custom python script to check files.") var customScriptPath: String?
     
     @Flag(name: .customShort("0"), help: "Use loose scan level.") var useLooseMode = false
     @Flag(name: .customShort("1"), help: "Use normal scan level.") var useNormalMode = false
     @Flag(name: .customShort("2"), help: "Use strict scan level (could result in false positive results).") var useStrictMode = false
     @Flag(name: [.customShort("w"), .long], help: "Display warnings instead of errors.") var useWarning = false
-    @Flag(name: .shortAndLong, help: "Scan all diff files (only applicable to MBox projects).") var scanAllDiff = false
     
     private func getScanLevel() -> Int {
         var scanLevel = 1
@@ -64,15 +64,11 @@ struct GLTClientCommand: ParsableCommand {
         // Scanning process
         if let indexPath = indexPath {
             
-            if let srcRoot = ProcessInfo.processInfo.environment["SRCROOT"] {
-                if let diffRes = client.scanFiles(filePaths: DiffFilesCollector(srcRoot: srcRoot, scanAllDiff: scanAllDiff).diff(),
-                                                  indexPath: indexPath,
-                                                  scanLevel: getScanLevel(),
-                                                  useWarning: useWarning) {
-                    if diffRes != "" { print(diffRes) }
-                }
-            } else {
-                print("SRCROOT not set.")
+            if let diffRes = client.scanFiles(filePaths: DiffFilesCollector(customScriptPath).diff(),
+                                              indexPath: indexPath,
+                                              scanLevel: getScanLevel(),
+                                              useWarning: useWarning) {
+                if diffRes != "" { print(diffRes) }
             }
             
             // Extra scan file

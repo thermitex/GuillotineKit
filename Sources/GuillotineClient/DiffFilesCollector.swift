@@ -9,19 +9,34 @@ import Foundation
 
 class DiffFilesCollector {
     
-    private var srcRoot: String
-    private var scanAllDiff: Bool
+    var inputFiles: [String]
     
-    init(srcRoot: String, scanAllDiff: Bool) {
-        self.srcRoot = srcRoot
-        self.scanAllDiff = scanAllDiff
+    private var customScriptPath: String?
+    
+    init(_ customScriptPath: String?) {
+        self.customScriptPath = customScriptPath
+        inputFiles = []
+        if let fileCountStr = ProcessInfo.processInfo.environment["SCRIPT_INPUT_FILE_COUNT"] {
+            if let fileCount = Int(fileCountStr) {
+                for i in 0..<fileCount {
+                    if let file = ProcessInfo.processInfo.environment["SCRIPT_INPUT_FILE_\(i)"] {
+                        inputFiles.append(file)
+                    }
+                }
+            }
+        } else {
+            print("SCRIPT_INPUT_FILE_COUNT not set.")
+        }
     }
     
     func diff() -> [String] {
         var res: [String] = []
-        if let diffScriptURL = Bundle.module.url(forResource: "diff", withExtension: "py") {
+        res.append(contentsOf: inputFiles)
+        if customScriptPath == nil { return res }
+        if let customScriptPath = customScriptPath {
             let bash: CommandExecuting = Bash()
-            if let diffOutput = try? bash.run(commandName: "python3", arguments: [diffScriptURL.path, srcRoot, scanAllDiff ? "scanall" : "-"]) {
+            let srcRoot = ProcessInfo.processInfo.environment["SRCROOT"]
+            if let diffOutput = try? bash.run(commandName: "python3", arguments: [customScriptPath, srcRoot == nil ? "" : srcRoot!]) {
                 let files = diffOutput.replacingOccurrences(of: "\n", with: "").components(separatedBy: ",")
                 res.append(contentsOf: files)
             }
