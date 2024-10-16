@@ -10,7 +10,7 @@ Once the project was built with `-index-store-path` option given and the databas
 
 Clone this repository, and in the same path also clone BDIndexDB:
 ```bash
-$ git clone git@code.byted.org:liruijie.x/BDIndexDB.git
+$ git clone git@<git_path>/BDIndexDB.git
 ```
 
 Enter the repository folder and execute build:
